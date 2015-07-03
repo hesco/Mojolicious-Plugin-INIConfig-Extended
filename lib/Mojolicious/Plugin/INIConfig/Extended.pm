@@ -200,7 +200,12 @@ L<Mojolicious::Plugin::INIConfig> and implements the following new ones.
 
 =head2 inherit
 
-  $plugin->inherit($content, $file, $conf, $app);
+  ## $plugin->inherit($content, $file, $conf, $app); <-- UNTESTED
+
+  $self->plugin('INIConfig::Extended', {
+     base_config => $self->app->config,
+    config_files => \@config_files });
+
 
 Overload a Config::Tiny configuration, return it as $app->cfg
 
