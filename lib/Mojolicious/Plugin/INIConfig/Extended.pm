@@ -132,7 +132,7 @@ B<This module is alpha release. the feature will be changed without warnings.>
   my $config = $self->plugin('INIConfig::Extended');
 
   # Mojolicious::Lite
-  my $config = plugin 'INIConfig';
+  my $config = plugin 'INIConfig::Extended';
 
   # foo.html.ep
   %= $config->{section}{foo}
@@ -141,9 +141,19 @@ B<This module is alpha release. the feature will be changed without warnings.>
   my $config = app->config;
 
   # Everything can be customized with options
-  my $config = plugin INIConfig => {file => '/etc/myapp.conf'};
+  my $config = plugin INIConfig::Extended => {file => '/etc/myapp.conf'};
+
+  $self->plugin('INIConfig::Extended', {
+     base_config => $self->app->config,
+    config_files => \@config_files });
+
+  If no $self->app->config already exists, you can provide an empty hashref {} instead 
+  and this ought to work, but please see the KNOWN BUGS section below.  
 
 =head1 DESCRIPTION
+
+L<Mojolicious-Plugin-INIConfig-Extended> 
+provides configuration inheritance and overloading
 
 L<Mojolicious::Plugin::INIConfig> is a INI configuration plugin that
 preprocesses its input with L<Mojo::Template>.
@@ -153,8 +163,14 @@ can extend the normal config file C<myapp.ini> with C<mode> specific ones
 like C<myapp.$mode.ini>. A default configuration filename will be generated
 from the value of L<Mojolicious/"moniker">.
 
-The code of this plugin is a good example for learning to build new plugins,
-you're welcome to fork it.
+This ::INIConfig::Extended module seeks to do for Mojolicious::Plugin::INIConfig, 
+what my earlier cpan contribution, Config::Simple::Extended 
+did for Config::Simple.  
+
+The code here barely refactors the INIConfig plugin's ->register method 
+to route to a new ->inherit method when appropriate.  I copied over the 
+test suite from ::INIConfig and ::INIConfig::Extended introduces no 
+regression and may be used as a drop in replacement.  
 
 =head1 OPTIONS
 
@@ -194,6 +210,21 @@ At least for now, in its early stages of development,
 this module should be considered experimental.  
 EXPERIMENTAL features may be changed without warnings.
 
+=head1 KNOWN BUGS 
+
+For the moment, as currently implemented, the ->inherit method, although 
+it expects both a base_config (hash ref) and a config_files (array ref), 
+and its design anticipates in the future processing that array of config files 
+to overload the configuration; it currently only processes the first ini file 
+in that array.  All other config files will be ignored.  
+
+Patches with tests are welcome in the form of a Pull Request.  Or with 
+patience I will soon enough encounter a use case which should make me 
+return to this project and to complete the implementation of its original 
+design.  For the moment, though, this serves my immediate needs.  For clues 
+on how to invoke the ->inherit method to overcome this limitation please 
+see `perldoc Config::Simple::Extended`.  
+
 =head1 BUGS
 
 Please tell me bugs if you find bug.
@@ -201,12 +232,17 @@ Please tell me bugs if you find bug.
 C<< <hesco at yourmessagedelivered.com> >>
 
 L<http://github.com/yuki-kimoto/Mojolicious-Plugin-INIConfig>
+L<http://github.com/hesco/Mojolicious-Plugin-INIConfig-Extended>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2013-2013 Yuki Kimoto, all rights reserved.
+Copyright 2015 Hugh Esco and YMD Partners LLC, all rights reserved.
+
+with appreciation to the original author for their work:
+Copyright 2013 Yuki Kimoto, all rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
 
 =cut
+

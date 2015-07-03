@@ -6,7 +6,9 @@ what my earlier cpan contribution, Config::Simple::Extended
 did for Config::Simple.  
 
 The code here barely refactors the INIConfig plugin's ->register method 
-to route to a new ->inherit method when appropriate.  
+to route to a new ->inherit method when appropriate.  I copied over the 
+test suite from ::INIConfig and ::INIConfig::Extended introduces no 
+regression and may be used as a drop in replacement.  
 
 # SYNOPSIS
 
