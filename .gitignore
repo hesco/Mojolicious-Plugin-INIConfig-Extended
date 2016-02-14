@@ -20,3 +20,6 @@ nytprof.out
 local/
 *.log
 cpanfile.snapshot
+/Mojolicious-Plugin-INIConfig-Extended.*/
+/Mojolicious-Plugin-INIConfig-Extended.*/*
+/Mojolicious-Plugin-INIConfig-Extended.*.tar.gz

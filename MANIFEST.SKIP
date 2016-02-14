@@ -1,0 +1,5 @@
+local/
+local/*
+cpanfile.snapshot
+^.*.stderr.log$
+
