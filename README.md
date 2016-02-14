@@ -55,6 +55,9 @@ DESCRIPTION
     test suite from ::INIConfig and ::INIConfig::Extended introduces no
     regression and may be used as a drop in replacement.
 
+    v0.02 now records a default.config_files key in the returned configuration 
+    hash which returns an array ref of files used to build the configuration.  
+
 OPTIONS
     Mojolicious::Plugin::INIConfig::Extended inherits all options from
     Mojolicious::Plugin::INIConfig and supports the following new ones.

@@ -5,7 +5,7 @@ use File::Spec::Functions 'file_name_is_absolute';
 use Mojo::Util qw/encode decode slurp/;
 use Data::Dumper;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 sub register {
   my ($self, $app, $conf) = @_;
@@ -79,12 +79,14 @@ sub inherit {
     my $stanzas_base_config = _get_stanzas( $args->{'base_config'} );
     my $stanzas_cfg_overload = _get_stanzas( $cfg_overload );
     # print STDERR '->inherit() says stanza include: ' . Dumper $stanzas;
+    push @{ $cfg_overloaded->{'default'}->{'config_files'} }, $args->{'config_files'}->[0]; 
     foreach my $stanza ( @{$stanzas_base_config}, @{$stanzas_cfg_overload} ){
       my $keys_base_config = _get_keys( $args->{'base_config'}, $stanza );
       my $keys_cfg_overload = _get_keys( $cfg_overload, $stanza );
       # print STDERR "->inherit() says base configuration's $stanza stanza includes: \n";
       foreach my $key ( @{$keys_base_config}, @{$keys_cfg_overload} ){
         # print STDERR "\t" . $key . ' => ' . $cfg_overloaded->{$stanza}->{$key} . "\n";
+        next if( $stanza eq 'default' && $key eq 'config_files' );
         $cfg_overloaded->{$stanza}->{$key} 
           = exists $cfg_overload->{$stanza}->{$key}
           ? $cfg_overload->{$stanza}->{$key}
@@ -105,9 +107,9 @@ sub _get_stanzas {
 sub _get_keys {
   my $cfg = shift;
   my $stanza = shift;
-  my @keys = exists $cfg->{$stanza}
-    ? keys %{$cfg->{$stanza}}
-    : ();
+  my @keys = exists $cfg->{$stanza} && (ref $cfg->{$stanza} eq 'HASH' )
+      ? keys %{$cfg->{$stanza}}
+      : ();
   return \@keys;
 }
 
