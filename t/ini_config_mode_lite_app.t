@@ -1,4 +1,5 @@
-use lib qw{ lib local/lib/perl5 };
+use FindBin;
+use lib ("$FindBin::Bin/../lib", "$FindBin::Bin/../local/lib/perl5");
 use Mojo::Base -strict;
 
 # Disable IPv6 and libev

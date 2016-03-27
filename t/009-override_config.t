@@ -2,8 +2,9 @@
 
 use POSIX qw(strftime);
 use Data::Dumper;
+use FindBin;
 
-use lib qw{ lib local/lib/perl5 };
+use lib ("$FindBin::Bin/../lib", "$FindBin::Bin/../local/lib/perl5");
 # use CF::DB;
 # use CF::Schema;
 use Test::Most;
