@@ -5,7 +5,7 @@ use File::Spec::Functions 'file_name_is_absolute';
 use Mojo::Util qw/encode decode slurp/;
 use Data::Dumper;
 
-our $VERSION = '0.03';
+our $VERSION = '0.05';
 
 sub register {
   my ($self, $app, $conf) = @_;
